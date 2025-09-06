@@ -42,6 +42,9 @@ class AuthMiddleware(BaseMiddleware):
                     
                     if state:
                         current_state = await state.get_state()
+                        logger.info(f"🔍 DEBUG: Пользователь {user.id}, состояние: {current_state}")
+                    else:
+                        logger.info(f"🔍 DEBUG: Пользователь {user.id}, состояние НЕ НАЙДЕНО")
                     
                     registration_states = [
                         RegistrationStates.waiting_for_rules_accept,
@@ -54,10 +57,16 @@ class AuthMiddleware(BaseMiddleware):
                             any(str(state) in str(current_state) for state in registration_states))
                         or (isinstance(event, CallbackQuery) and event.data and 
                             (event.data in ['rules_accept', 'rules_decline', 'referral_skip']))
+                        or (isinstance(event, Message) and current_state and 
+                            any(str(state) in str(current_state) for state in registration_states))
                     )
                     
+                    logger.info(f"🔍 DEBUG: is_registration_process = {is_registration_process}")
+                    if isinstance(event, Message) and current_state:
+                        logger.info(f"🔍 DEBUG: Message в состоянии {current_state}, проверка: {any(str(state) in str(current_state) for state in registration_states)}")
+                    
                     if is_registration_process:
-                        logger.info(f"🔍 Пропускаем пользователя {user.id} в процессе регистрации")
+                        logger.info(f"🔍 Пропускаем пользователя {user.id} в процессе регистрации (состояние: {current_state})")
                         data['db'] = db
                         data['db_user'] = None
                         data['is_admin'] = False
@@ -103,6 +112,8 @@ class AuthMiddleware(BaseMiddleware):
                                 any(str(state) in str(current_state) for state in registration_states))
                             or (isinstance(event, CallbackQuery) and event.data and 
                                 (event.data in ['rules_accept', 'rules_decline', 'referral_skip']))
+                            or (isinstance(event, Message) and current_state and 
+                                any(str(state) in str(current_state) for state in registration_states))
                         )
                         
                         if is_start_or_registration:

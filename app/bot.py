@@ -67,15 +67,20 @@ async def setup_bot() -> tuple[Bot, Dispatcher]:
         storage = MemoryStorage()
     
     dp = Dispatcher(storage=storage)
+    # Порядок middleware важен! AuthMiddleware должен быть первым после LoggingMiddleware
     dp.message.middleware(LoggingMiddleware())
     dp.callback_query.middleware(LoggingMiddleware())
+    
     dp.message.middleware(AuthMiddleware())
     dp.callback_query.middleware(AuthMiddleware())
     dp.pre_checkout_query.middleware(AuthMiddleware())
+    
     dp.message.middleware(MaintenanceMiddleware())
     dp.callback_query.middleware(MaintenanceMiddleware())
+    
     dp.message.middleware(ThrottlingMiddleware())
     dp.callback_query.middleware(ThrottlingMiddleware())
+    
     dp.message.middleware(SubscriptionStatusMiddleware())
     dp.callback_query.middleware(SubscriptionStatusMiddleware())
     start.register_handlers(dp)
