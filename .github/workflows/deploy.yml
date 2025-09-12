@@ -3,7 +3,7 @@ name: Deploy Bot
 on:
   push:
     branches:
-      - feature   # деплой при пуше в ветку feature
+      - feature   # деплой только при пуше в feature
 
 jobs:
   deploy:
@@ -21,6 +21,8 @@ jobs:
           script: |
             cd /opt/mybot || git clone https://github.com/Legacyyy777/remnawave-bedolaga-telegram-bot_777.git /opt/mybot
             cd /opt/mybot
+            git fetch origin
+            git checkout feature
             git pull origin feature
             docker compose build
             docker compose up -d
