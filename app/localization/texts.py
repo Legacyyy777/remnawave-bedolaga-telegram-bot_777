@@ -413,7 +413,7 @@ class RussianTexts(Texts):
     ADMIN_PANEL = """
 ⚙️ <b>Административная панель</b>
 
-🟢 Онлайн сейчас: {online_count}
+{status_icon} Онлайн сейчас: {online_count}
 
 Выберите раздел для управления:
 """
@@ -539,7 +539,7 @@ To get started, select interface language:
     ADMIN_PANEL = """
 ⚙️ <b>Administrative panel</b>
 
-🟢 Online now: {online_count}
+{status_icon} Online now: {online_count}
 
 Select a section to manage:
 """
