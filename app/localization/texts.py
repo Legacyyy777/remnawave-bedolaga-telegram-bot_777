@@ -413,6 +413,8 @@ class RussianTexts(Texts):
     ADMIN_PANEL = """
 ⚙️ <b>Административная панель</b>
 
+{status_icon} Онлайн сейчас: {online_count}
+
 Выберите раздел для управления:
 """
     
@@ -533,6 +535,14 @@ To get started, select interface language:
     CONTINUE = "➡️ Continue"
     YES = "✅ Yes"
     NO = "❌ No"
+
+    ADMIN_PANEL = """
+⚙️ <b>Administrative panel</b>
+
+{status_icon} Online now: {online_count}
+
+Select a section to manage:
+"""
 
     MENU_BALANCE = "💰 Balance"
     MENU_SUBSCRIPTION = "📱 Subscription"
