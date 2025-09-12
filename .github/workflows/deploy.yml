@@ -1,0 +1,26 @@
+name: Deploy Bot
+
+on:
+  push:
+    branches:
+      - feature   # деплой при пуше в ветку feature
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            cd /opt/mybot || git clone https://github.com/Legacyyy777/remnawave-bedolaga-telegram-bot_777.git /opt/mybot
+            cd /opt/mybot
+            git pull origin feature
+            docker compose build
+            docker compose up -d
