@@ -19,10 +19,19 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            cd /opt/mybot || git clone https://github.com/Legacyyy777/remnawave-bedolaga-telegram-bot_777.git /opt/mybot
+            # если папки ещё нет — клонируем
+            if [ ! -d /opt/mybot/.git ]; then
+              rm -rf /opt/mybot
+              git clone https://github.com/Legacyyy777/remnawave-bedolaga-telegram-bot_777.git /opt/mybot
+            fi
+
             cd /opt/mybot
+
+            # обновляем и переключаемся на feature
             git fetch origin
             git checkout feature
-            git pull origin feature
+            git reset --hard origin/feature
+
+            # пересобираем и запускаем контейнер
             docker compose build
             docker compose up -d
