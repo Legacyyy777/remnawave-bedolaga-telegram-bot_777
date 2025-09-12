@@ -7,7 +7,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.config import settings
 from app.database.models import User
 from app.services.maintenance_service import maintenance_service
-from app.keyboards.admin import get_maintenance_keyboard, get_admin_main_keyboard
+from app.keyboards.admin import get_maintenance_keyboard
+from app.handlers.admin.main import show_admin_panel
 from app.localization.texts import get_texts
 from app.utils.decorators import admin_required, error_handler
 
@@ -372,13 +373,7 @@ async def back_to_admin_panel(
     db_user: User,
     db: AsyncSession
 ):
-    texts = get_texts(db_user.language)
-    
-    await callback.message.edit_text(
-        texts.ADMIN_PANEL,
-        reply_markup=get_admin_main_keyboard(db_user.language)
-    )
-    await callback.answer()
+    await show_admin_panel(callback, db_user, db)
 
 
 def register_handlers(dp: Dispatcher):
@@ -417,12 +412,7 @@ def register_handlers(dp: Dispatcher):
         handle_manual_notification,
         F.data.startswith("manual_notify_")
     )
-    
-    dp.callback_query.register(
-        back_to_admin_panel,
-        F.data == "admin_panel"
-    )
-    
+
     dp.message.register(
         process_maintenance_reason,
         MaintenanceStates.waiting_for_reason
