@@ -1229,6 +1229,6 @@ REMNAWAVE_SECRET_KEY=XXXXXXX:DDDDDDDD
 
 ---
 
-**Made with ❤️ by [@fringg](https://t.me/fringg)**
+**Made with ❤️ by [@fringg](https://t.me/fringg).**
 
 </div>
