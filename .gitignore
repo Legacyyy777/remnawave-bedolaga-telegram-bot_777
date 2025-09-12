@@ -4,6 +4,7 @@
 # Исключения: разрешаем только нужные файлы
 !.dockerignore
 !.env.example
+!.env
 !Dockerfile
 !app-config.json
 !main.py
